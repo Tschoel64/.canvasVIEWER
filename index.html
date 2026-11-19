@@ -55,7 +55,7 @@ input[type=search],input[type=text],input[type=password]{background:var(--ui);co
 .katex-display{margin:.5em 0;overflow-x:auto;overflow-y:hidden}
 button,.bt,#q,#mm,#ct{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--card)}
 .lt{display:none}.lod .in,.lod .ft,.lod .el{display:none}.lod .n{container-type:size}
-.lod .lt{display:block;position:absolute;inset:0;overflow:hidden;padding:calc(var(--fs)*.35);font-weight:600;line-height:1.2;font-size:min(var(--fs),22cqmin);white-space:pre-line;word-break:break-word;color:var(--tx)}
+center{display:block;text-align:center}.lod .lt{display:block;position:absolute;left:0;top:0;padding:calc(var(--fs)*.35);font-weight:600;line-height:1.2;font-size:clamp(var(--fm),calc(165cqw/var(--n)),var(--fs));white-space:nowrap;color:var(--tx)}
 .lod .gl{font-size:var(--fs);margin-bottom:calc(var(--fs)*.4);padding:0 calc(var(--fs)*.5);border-radius:calc(var(--fs)*.5)}.lod #es path{stroke-width:4}
 @media print{@page{size:420mm 297mm;margin:0}html,body{width:1587px;height:1123px;overflow:hidden}#bar,#mm,#pn,#ct,#em{display:none!important}#st{position:absolute!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 [hidden]{display:none!important}
@@ -84,7 +84,8 @@ const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function toast(t){const e=$('#ct');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2800)}
 
 /* ---------- Markdown ---------- */
-function inl(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^\w*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/~~(.+?)~~/g,'<s>$1</s>').replace(/==(.+?)==/g,'<mark>$1</mark>')
+const TG=h=>h.replace(/&lt;(\/?)(u|b|i|em|strong|s|del|mark|sub|sup|small|kbd|center|h[1-6])&gt;/gi,'<$1$2>').replace(/&lt;br\s*\/?&gt;/gi,'<br>').replace(/&lt;\/?(?:div|span|font|p|a|img|details|summary)\b(?:(?!&gt;).)*&gt;/gi,'');
+function inl(s){return esc(s).split(/(`[^`]*`)/).map((u,i)=>i%2?u:TG(u)).join('').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^\w*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/~~(.+?)~~/g,'<s>$1</s>').replace(/==(.+?)==/g,'<mark>$1</mark>')
 .replace(/!\[\[([^\]|]+)[^\]]*\]\]/g,'<img data-p="$1">').replace(/!\[[^\]]*\]\(([^)]+)\)/g,'<img data-p="$1">')
 .replace(/\[\[([^\]]+)\]\]/g,(m,a)=>{const p=a.split('|');return '<span class="wl">'+(p[1]||p[0].split('#')[0])+'</span>'})
 .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')}
@@ -99,6 +100,7 @@ else if(m=l.match(/^\s*[-*+]\s+(.*)/))li('ul','<li>'+inl(m[1])+'</li>');
 else if(m=l.match(/^\s*\d+[.)]\s+(.*)/))li('ol','<li>'+inl(m[1])+'</li>');
 else if(/^>/.test(l)){close();o.push('<blockquote>'+inl(l.replace(/^>\s?/,''))+'</blockquote>')}
 else if(/^\s*(---+|\*\*\*+)\s*$/.test(l)){close();o.push('<hr>')}
+else if(/^\s*<\/?center>\s*$/i.test(l)){close();o.push(l.trim().toLowerCase())}
 else if(!l.trim())close();else{close();o.push('<p>'+inl(l)+'</p>')}}
 close();return o.join('')}
 
@@ -137,7 +139,7 @@ for(const c of cs){try{const b=await(await gh(c,true)).blob();FB[c]=b;kvSet(K(c)
 function fixImgs(el){el.querySelectorAll('img[data-p]').forEach(async i=>{const p=i.dataset.p;if(/^https?:/.test(p)){i.src=p;return}const b=await fileBlob(p);if(b)i.src=URL.createObjectURL(b);else i.alt=p})}
 
 /* ---------- Rendering ---------- */
-const ttl=n=>n.type=='file'?n.file.split('/').pop():n.type=='link'?n.url:(n.text||'').split('\n').map(l=>l.replace(/\[!\w+\][+-]?|^([>#*+\-\s]|\d+\.\s)+|\*\*|`|\[\[|\]\]|~~|==|\$/g,'').trim()).filter(Boolean).slice(0,4).join('\n');
+const ttl=n=>n.type=='file'?n.file.split('/').pop():n.type=='link'?n.url:(n.text||'').split('\n').map(l=>l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/\[!\w+\][+-]?|^([>#*+\-\s]|\d+\.\s)+|\*\*|`|\[\[|\]\]|~~|==|\$/g,'').trim()).filter(Boolean).slice(0,1).join('');
 function anchor(n,s){return s=='top'?[n.x+n.width/2,n.y]:s=='bottom'?[n.x+n.width/2,n.y+n.height]:s=='left'?[n.x,n.y+n.height/2]:[n.x+n.width,n.y+n.height/2]}
 const DIR={top:[0,-1],bottom:[0,1],left:[-1,0],right:[1,0]};
 function show(text,name,view){
@@ -152,7 +154,7 @@ else{d.className='n'+(c1?' col':'');
 if(n.type=='file'){d.innerHTML=`<div class="ft">${esc(n.file.split('/').pop())}</div><div class="in"></div>`;loadFile(n,d.querySelector('.in'))}
 else if(n.type=='link')d.innerHTML=`<div class="in"><div class="lk"><div class="mu">Link</div><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.url)}</a></div></div>`;
 else{d.innerHTML=`<div class="in"><div class="md">${md(n.text||'')}</div></div>`;fixImgs(d)}}
-if(n.type!='group'){const lt=document.createElement('div');lt.className='lt';lt.textContent=ttl(n);d.appendChild(lt)}W.appendChild(d)}
+if(n.type!='group'){const lt=document.createElement('div');lt.className='lt';const tt=ttl(n);lt.textContent=tt;lt.style.setProperty('--n',Math.max(6,[...tt].length));d.appendChild(lt)}W.appendChild(d)}
 /* Edges */
 const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');ES.appendChild(defs);const mk={};
 const marker=c=>{if(mk[c])return mk[c];const id='m'+Object.keys(mk).length;mk[c]=id;defs.insertAdjacentHTML('beforeend',`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`);return id};
@@ -177,8 +179,8 @@ const x0=Math.min(...NS.map(n=>n.x)),y0=Math.min(...NS.map(n=>n.y)),x1=Math.max(
 /* ---------- Ansicht ---------- */
 const clampK=k=>Math.min(3,Math.max(.03,k));
 function apply(){W.style.transform=`translate3d(${V.x}px,${V.y}px,0) scale(${V.k})`;const s=20*V.k;st.style.backgroundSize=s+'px '+s+'px';st.style.backgroundPosition=`${V.x}px ${V.y}px`;st.style.backgroundImage=s<7?'none':'';
-if(V.k<.35)W.style.setProperty('--fs',Math.min(14/V.k,400)+'px');if(!raf)raf=requestAnimationFrame(cull);clearTimeout(apply.t);apply.t=setTimeout(()=>cur&&localStorage.setItem('cv:view',JSON.stringify(V)),500)}
-function cull(){raf=0;const lod=!PR&&V.k<.35;if(lod!==lodOn){lodOn=lod;W.classList.toggle('lod',lod)}
+if(V.k<.15){W.style.setProperty('--fs',14/V.k+'px');W.style.setProperty('--fm',10/V.k+'px')}if(!raf)raf=requestAnimationFrame(cull);clearTimeout(apply.t);apply.t=setTimeout(()=>cur&&localStorage.setItem('cv:view',JSON.stringify(V)),500)}
+function cull(){raf=0;const lod=!PR&&V.k<.15;if(lod!==lodOn){lodOn=lod;W.classList.toggle('lod',lod)}
 const m=200/V.k,x0=-V.x/V.k-m,y0=-V.y/V.k-m,x1=(innerWidth-V.x)/V.k+m,y1=(innerHeight-V.y)/V.k+m;
 for(const n of NS){const v=PR||!(n.x>x1||n.x+n.width<x0||n.y>y1||n.y+n.height<y0);if(v!==n.v){n.v=v;n.el.style.display=v?'':'none'}
 if(v&&n.pu&&!lod&&!n.ifr){n.ifr=1;n.el.querySelector('.in').innerHTML=`<iframe src="${n.pu}"></iframe>`}}
@@ -249,7 +251,7 @@ addEventListener('afterprint',endPrint);st.addEventListener('pointerdown',endPri
 $('#pdf').onclick=()=>{PV={...V};PR=1;document.body.classList.add('pr');st.style.width='1587px';st.style.height='1123px';fit(1587,1123);cull();toast('Teilen → „Sichern als PDF“ bzw. Drucken wählen');setTimeout(()=>print(),400)};
 function wrap(x,n,t,tx){let y=n.y+10;const mw=n.width-32;
 for(let l of t.split('\n')){const hd=l.match(/^(#{1,6})\s/),sz=hd?[0,28,24,20,18,16,16][hd[1].length]:16,lh=sz*1.4;
-l=l.replace(/^#+\s|\*\*|`|\[\[|\]\]|~~|==/g,'').replace(/^\s*[-*+]\s+/,'• ');x.font=(hd?'700 ':'')+sz+'px -apple-system,sans-serif';x.fillStyle=tx;
+l=l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/^#+\s|\*\*|`|\[\[|\]\]|~~|==/g,'').replace(/^\s*[-*+]\s+/,'• ');x.font=(hd?'700 ':'')+sz+'px -apple-system,sans-serif';x.fillStyle=tx;
 if(!l.trim()){y+=8;continue}let ln='';
 for(const w of l.split(' ')){const u=ln?ln+' '+w:w;if(x.measureText(u).width>mw&&ln){y+=lh;if(y-sz>n.y+n.height)return;x.fillText(ln,n.x+16,y);ln=w}else ln=u}
 y+=lh;if(y-sz>n.y+n.height)return;x.fillText(ln,n.x+16,y)}}
