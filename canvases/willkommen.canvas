@@ -1,0 +1,62 @@
+{
+ "nodes": [
+  {
+   "id": "g1",
+   "type": "group",
+   "x": -40,
+   "y": -70,
+   "width": 1000,
+   "height": 560,
+   "label": "Beispiel",
+   "color": "4"
+  },
+  {
+   "id": "n1",
+   "type": "text",
+   "x": 0,
+   "y": 0,
+   "width": 360,
+   "height": 230,
+   "color": "6",
+   "text": "# <u>Willkommen</u>\nLege deine `.canvas`-Dateien in den Ordner `canvases/`.\n\n- [x] Viewer läuft\n- [ ] Eigene Canvas hinzufügen"
+  },
+  {
+   "id": "n2",
+   "type": "text",
+   "x": 520,
+   "y": 0,
+   "width": 380,
+   "height": 190,
+   "text": "## Tabelle\n| Name | Wert |\n|---|:-:|\n| Zoom | 100 % |\n| Pfeile | skalieren |"
+  },
+  {
+   "id": "n3",
+   "type": "text",
+   "x": 520,
+   "y": 260,
+   "width": 380,
+   "height": 190,
+   "color": "5",
+   "text": "> [!tip] Formeln\n> $E=mc^2$\n\n$$\\int_0^1 x\\,dx=\\tfrac12$$"
+  }
+ ],
+ "edges": [
+  {
+   "id": "e1",
+   "fromNode": "n1",
+   "fromSide": "right",
+   "toNode": "n2",
+   "toSide": "left",
+   "label": "Tabelle",
+   "color": "2"
+  },
+  {
+   "id": "e2",
+   "fromNode": "n1",
+   "fromSide": "bottom",
+   "toNode": "n3",
+   "toSide": "left",
+   "toEnd": "arrow"
+  }
+ ]
+}

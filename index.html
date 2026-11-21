@@ -6,12 +6,13 @@
 <meta name="apple-mobile-web-app-title" content="Canvas">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Canvas Viewer</title>
+<link rel="stylesheet" href="katex/katex.min.css"><script src="katex/katex.min.js"></script>
 <style>
 :root{--bg:#fff;--dot:#d6d6d6;--card:#fff;--bd:#b9b9b9;--tx:#222;--mu:#808080;--ui:rgba(246,246,246,.88);--ln:#e0e0e0;--ac:#7c5cdb;color-scheme:light}
 @media(prefers-color-scheme:dark){:root{--bg:#1e1e1e;--dot:#363636;--card:#1e1e1e;--bd:#5a5a5a;--tx:#dadada;--mu:#8a8a8a;--ui:rgba(36,36,36,.88);--ln:#3a3a3a;--ac:#a68af9;color-scheme:dark}}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;-webkit-text-size-adjust:100%}
-#st{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;background-image:radial-gradient(circle,var(--dot) 1.2px,transparent 1.6px);background-size:20px 20px;overflow:hidden}
+#st{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
 #w{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
 #es{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}
 .n,.g{position:absolute;border:2px solid var(--c,var(--bd));border-radius:8px;background:var(--card)}
@@ -31,7 +32,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 .md mark{background:#e0de7160;color:inherit;border-radius:3px}.md img{max-width:100%;border-radius:4px}.mu{color:var(--mu)}
 .fi{width:100%;height:100%;object-fit:contain;display:block}.in iframe{width:100%;height:100%;border:0;background:#fff}
 .lk{padding:14px 16px;display:flex;flex-direction:column;gap:6px;height:100%;justify-content:center}.lk a{color:var(--ac);word-break:break-all}
-.el{position:absolute;transform:translate(-50%,-50%);padding:1px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--ln);font-size:13px;white-space:nowrap}
+.el{position:absolute;transform:translate(-50%,-50%) scale(var(--ls,1));padding:1px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--ln);font-size:13px;white-space:nowrap}
 .hit{outline:3px solid var(--ac);outline-offset:3px}.dim{opacity:.28}
 #bar{position:fixed;left:0;right:0;top:0;z-index:5;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;display:flex;gap:8px;align-items:center;pointer-events:none}
 #bar>*{pointer-events:auto}
@@ -49,19 +50,39 @@ input[type=search],input[type=text],input[type=password]{background:var(--ui);co
 .sh h3,.sh h4{margin:0}.sh h4{color:var(--mu);font-size:13px;font-weight:600;margin-top:6px}
 .row{display:flex;gap:8px}.it{display:block;width:100%;text-align:left;border-radius:8px;background:none;border:0;padding:8px 6px;border-bottom:1px solid var(--ln);backdrop-filter:none}
 #ct{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ui);border:1px solid var(--ln);padding:8px 14px;border-radius:10px;z-index:30;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.md table{border-collapse:collapse;margin:.6em 0;font-size:.95em}.md th,.md td{border:1px solid var(--ln);padding:4px 10px}.md th{font-weight:700;background:color-mix(in srgb,var(--tx) 5%,transparent)}
+.co{margin:.6em 0;padding:10px 12px;border-radius:6px;background:rgba(var(--cc),.1)}.ct{display:flex;gap:8px;align-items:center;font-weight:600;color:rgb(var(--cc))}.cg{width:1.2em;text-align:center}.cb{margin-top:6px}.cb>*:first-child{margin-top:0}.cb>*:last-child{margin-bottom:0}summary.ct{cursor:pointer;list-style:none}summary.ct::-webkit-details-marker{display:none}
+.katex-display{margin:.5em 0;overflow-x:auto;overflow-y:hidden}
+button,.bt,#q,#mm,#ct{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--card)}
+.lt{display:none}.lod .in,.lod .ft,.lod .el{display:none}.lod .n{container-type:size}
+center{display:block;text-align:center}.lod .lt{display:block;position:absolute;left:0;top:0;padding:calc(var(--fs)*.35);font-weight:600;line-height:1.2;font-size:clamp(var(--fm),calc(165cqw/var(--n)),var(--fs));white-space:nowrap;color:var(--tx)}
+.lod .gl{font-size:var(--fs);margin-bottom:calc(var(--fs)*.4);padding:0 calc(var(--fs)*.5);border-radius:calc(var(--fs)*.5)}.lod #es path{stroke-width:4}
+@media print{@page{size:420mm 297mm;margin:0}html,body{width:1587px;height:1123px;overflow:hidden}#bar,#mm,#pn,#ct,#em{display:none!important}#st{position:absolute!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+#sb{position:fixed;left:0;top:0;bottom:0;width:min(320px,85vw);z-index:8;background:var(--card);border-right:1px solid var(--ln);padding:calc(env(safe-area-inset-top,0px) + 10px) 12px calc(env(safe-area-inset-bottom,0px) + 12px);overflow:auto}
+.sbh{display:flex;justify-content:space-between;align-items:center}#sb h4{margin:14px 0 4px;color:var(--mu);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.it2{position:relative;padding:8px 34px 8px 10px;border-radius:8px;cursor:pointer}.it2.on{background:color-mix(in srgb,var(--ac) 16%,transparent)}.it2 .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it2 button{position:absolute;right:2px;top:8px;border:0;background:none;padding:2px 8px;color:var(--mu)}.s{font-size:12px}
+.ol{padding:6px 8px;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.ol.g{font-weight:700;margin-top:6px}.ol.c{margin-left:16px}
+.ol:active,.it2:active{background:color-mix(in srgb,var(--tx) 10%,transparent)}
+@media print{#sb,#gc{display:none!important}}
+#gc{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}#es .e{stroke-width:var(--sw,2px)}.ah{transform-origin:0 0}
+select{font:inherit;background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;width:100%}#sgh{display:flex;flex-direction:column;gap:8px}
 [hidden]{display:none!important}
 </style></head><body>
-<div id="st"><div id="w"><svg id="es"></svg></div></div>
-<div id="bar"><button id="mn">Öffnen</button><div id="ttl"></div><input id="q" type="search" placeholder="Suchen" enterkeyhint="search" hidden><button id="fit" hidden>Einpassen</button></div>
+<div id="st"><canvas id="gc"></canvas><div id="w"><svg id="es"></svg></div></div>
+<div id="bar"><button id="sbt">Outliner</button><button id="mn">Öffnen</button><div id="ttl"></div><input id="q" type="search" placeholder="Suchen" enterkeyhint="search" hidden><button id="png" hidden>PNG</button><button id="pdf" hidden>PDF</button><button id="off" hidden>Offline</button></div>
 <canvas id="mm" width="320" height="220" hidden></canvas>
 <div id="em"><div style="font-size:20px;color:var(--tx)">Kein Canvas geöffnet</div><div>Wähle ein Repository oder eine lokale .canvas-Datei.</div><button id="em1">Canvas öffnen</button></div>
+<div id="sb" hidden><div class="sbh"><b>Outliner</b><button id="sbx">Schließen</button></div><h4>Zuletzt geöffnet</h4><div id="sr"></div><h4>Gliederung</h4><div id="so"></div></div>
 <div id="pn" hidden><div class="sh">
-<h3>Canvas öffnen</h3>
-<input id="rp" type="text" placeholder="Besitzer/Repository" autocapitalize="off" autocorrect="off">
+<h3>Canvas öffnen <span class="mu s">v7</span></h3>
+<select id="src"><option value="self">Dieses Repo (canvases/)</option><option value="gh">Anderes GitHub-Repo</option><option value="rec">Zuletzt geöffnet</option></select>
+<div id="sgh" hidden><input id="rp" type="text" placeholder="Besitzer/Repository" autocapitalize="off" autocorrect="off">
 <div class="row"><input id="br" type="text" placeholder="Branch (optional)" autocapitalize="off"><input id="tk" type="password" placeholder="Token (nur für private Repos)"></div>
-<div class="row"><button id="go">Repository laden</button><label class="bt">Lokale Datei<input id="lf" type="file" hidden></label><button id="cl">Schließen</button></div>
-<div id="cr" class="mu"></div><div id="ls"></div>
-<h4>Zuletzt geöffnet</h4><div id="rc"></div>
+<button id="go">Repository laden</button></div>
+<div class="row"><label class="bt">Lokale Datei<input id="lf" type="file" hidden></label><button id="cl">Schließen</button></div>
+<div id="lw"><div id="cr" class="mu"></div><div id="ls"></div></div>
+<div id="rcw" hidden><div id="rc"></div></div>
 </div></div>
 <div id="ct" hidden></div>
 <script>
@@ -70,16 +91,17 @@ const COL={1:'#fb464c',2:'#e9973f',3:'#e0de71',4:'#44cf6e',5:'#53dfdd',6:'#a882f
 const col=c=>c?(COL[c]||c):null;
 const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
 let cfg=ld('cv:cfg',{}),rec=ld('cv:rec',[]),cur=null,V={x:0,y:0,k:1},NS=[],B=null,MS=null,HITS=[],hi=0;
-const FB={};
+const FB={};let EG=[],PR=0,PV=null,raf=0,lastMm=0,mt=0,MINK=.03,VEL={vx:0,vy:0,t:0},INER=0;
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function toast(t){const e=$('#ct');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2800)}
 
 /* ---------- Markdown ---------- */
-function inl(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^\w*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/~~(.+?)~~/g,'<s>$1</s>').replace(/==(.+?)==/g,'<mark>$1</mark>')
+const TG=h=>h.replace(/&lt;(\/?)(u|b|i|em|strong|s|del|mark|sub|sup|small|kbd|center|h[1-6])&gt;/gi,'<$1$2>').replace(/&lt;br\s*\/?&gt;/gi,'<br>').replace(/&lt;\/?(?:div|span|font|p|a|img|details|summary)\b(?:(?!&gt;).)*&gt;/gi,'');
+function inl(s){return esc(s).split(/(`[^`]*`)/).map((u,i)=>i%2?u:TG(u)).join('').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^\w*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/~~(.+?)~~/g,'<s>$1</s>').replace(/==(.+?)==/g,'<mark>$1</mark>')
 .replace(/!\[\[([^\]|]+)[^\]]*\]\]/g,'<img data-p="$1">').replace(/!\[[^\]]*\]\(([^)]+)\)/g,'<img data-p="$1">')
 .replace(/\[\[([^\]]+)\]\]/g,(m,a)=>{const p=a.split('|');return '<span class="wl">'+(p[1]||p[0].split('#')[0])+'</span>'})
 .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')}
-function md(t){const o=[];let list=null,code=false,buf=[];const close=()=>{if(list){o.push('</'+list+'>');list=null}};
+function md0(t){const o=[];let list=null,code=false,buf=[];const close=()=>{if(list){o.push('</'+list+'>');list=null}};
 const li=(k,h)=>{if(list!=k){close();o.push('<'+k+'>');list=k}o.push(h)};
 for(const l of t.split('\n')){let m;
 if(/^```/.test(l)){if(code){o.push('<pre><code>'+esc(buf.join('\n'))+'</code></pre>');buf=[];code=false}else{close();code=true}continue}
@@ -90,26 +112,52 @@ else if(m=l.match(/^\s*[-*+]\s+(.*)/))li('ul','<li>'+inl(m[1])+'</li>');
 else if(m=l.match(/^\s*\d+[.)]\s+(.*)/))li('ol','<li>'+inl(m[1])+'</li>');
 else if(/^>/.test(l)){close();o.push('<blockquote>'+inl(l.replace(/^>\s?/,''))+'</blockquote>')}
 else if(/^\s*(---+|\*\*\*+)\s*$/.test(l)){close();o.push('<hr>')}
+else if(/^\s*<\/?center>\s*$/i.test(l)){close();o.push(l.trim().toLowerCase())}
 else if(!l.trim())close();else{close();o.push('<p>'+inl(l)+'</p>')}}
 close();return o.join('')}
 
+const X=[],SEP=/^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/,cells=l=>l.trim().replace(/^\||\|$/g,'').split(/(?<!\\)\|/).map(c=>c.trim());
+const ph=h=>'\u0002'+(X.push(h)-1)+'\u0002';
+const mth=(a,d)=>ph(window.katex?katex.renderToString(a.trim(),{displayMode:!!d,throwOnError:false}):(mth.w=mth.w||(toast('KaTeX nicht gefunden: Ordner „katex“ mit ins Repo laden'),1),esc((d?'$$':'$')+a+(d?'$$':'$'))));
+const CO={};[['8,109,221','✎','note info todo'],['0,191,188','✦','tip hint important abstract summary tldr'],['8,185,78','✓','success check done'],['236,117,0','?','question help faq'],['236,117,0','⚠','warning caution attention'],['233,49,71','✕','failure fail missing danger error bug'],['120,82,238','☰','example'],['158,158,158','❝','quote cite']].forEach(([c,g,l])=>l.split(' ').forEach(k=>CO[k]=[c,g]));
+function md(t){X.length=0;
+t=t.split(/(```[\s\S]*?```)/).map((s,i)=>i%2?s:s.replace(/\$\$([\s\S]+?)\$\$/g,(m,a)=>mth(a,1)).split(/(`[^`\n]*`)/).map((u,j)=>j%2?u:u.replace(/\$(?=\S)([^$\n]*?\S)\$/g,(m,a)=>mth(a,0))).join('')).join('');
+const L=t.split('\n'),o=[];let f=false,m;
+for(let i=0;i<L.length;i++){const l=L[i];
+if(/^```/.test(l)){f=!f;o.push(l);continue}
+if(f){o.push(l);continue}
+if(l.includes('|')&&!SEP.test(l)&&SEP.test(L[i+1]||'')){const al=cells(L[i+1]).map(c=>/^:.*:$/.test(c)?'center':/:$/.test(c)?'right':'left');
+let h='<table><thead><tr>'+cells(l).map((c,k)=>`<th style="text-align:${al[k]||'left'}">${inl(c)}</th>`).join('')+'</tr></thead><tbody>';i+=2;
+for(;i<L.length&&L[i].includes('|')&&L[i].trim();i++)h+='<tr>'+cells(L[i]).map((c,k)=>`<td style="text-align:${al[k]||'left'}">${inl(c)}</td>`).join('')+'</tr>';i--;o.push(ph(h+'</tbody></table>'));continue}
+if(m=l.match(/^>\s*\[!(\w+)\]([+-]?)\s*(.*)/)){const b=[];while(i+1<L.length&&/^>/.test(L[i+1]))b.push(L[++i].replace(/^>\s?/,''));
+const ty=m[1].toLowerCase(),[c,g]=CO[ty]||CO.note,ti=`<span class="cg">${g}</span>${inl(m[3]||ty[0].toUpperCase()+ty.slice(1))}`,bd=`<div class="cb">${md0(b.join('\n'))}</div>`;
+o.push(ph(m[2]?`<details class="co" style="--cc:${c}" ${m[2]=='+'?'open':''}><summary class="ct">${ti}</summary>${bd}</details>`:`<div class="co" style="--cc:${c}"><div class="ct">${ti}</div>${bd}</div>`));continue}
+o.push(l)}
+let s=md0(o.join('\n')).replace(/<p>\u0002(\d+)\u0002<\/p>/g,(a,n)=>X[n]);
+for(let k=0;k<3;k++)s=s.replace(/\u0002(\d+)\u0002/g,(a,n)=>X[n]);return s}
 /* ---------- GitHub ---------- */
 async function gh(path,raw){
+if(cfg.repo=='@self'){const r=await fetch(path.split('/').map(encodeURIComponent).join('/'));if(!r.ok)throw new Error(r.status);return r}
 const u=`https://api.github.com/repos/${cfg.repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}${cfg.branch?'?ref='+encodeURIComponent(cfg.branch):''}`;
 const h={Accept:raw?'application/vnd.github.raw+json':'application/vnd.github+json'};if(cfg.token)h.Authorization='Bearer '+cfg.token;
 const r=await fetch(u,{headers:h});if(!r.ok)throw new Error(r.status);return r}
-async function fileBlob(p){
+const db=new Promise(r=>{try{const q=indexedDB.open('cv',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)}catch{r(null)}});
+const kvGet=async k=>{const d=await db;if(!d)return;return new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>r(q.result);q.onerror=()=>r()})};
+const kvSet=async(k,v)=>{const d=await db;if(!d)return;return new Promise(r=>{const t=d.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=()=>r(1);t.onerror=()=>r(0)})};
+async function fileBlob(p,force){
 if(!cur||!cur.repo||/^https?:/.test(p))return null;
-const dir=cur.path?cur.path.split('/').slice(0,-1).join('/'):'';
-for(const c of [p,dir?dir+'/'+p:p]){if(FB[c])return FB[c];try{return FB[c]=await(await gh(c,true)).blob()}catch{}}return null}
+const dir=cur.path?cur.path.split('/').slice(0,-1).join('/'):'',cs=[p,dir?dir+'/'+p:p],K=c=>'f:'+cur.repo+'@'+cur.branch+':'+c;
+if(!force)for(const c of cs){if(FB[c])return FB[c];const b=await kvGet(K(c));if(b)return FB[c]=b}
+for(const c of cs){try{const b=await(await gh(c,true)).blob();FB[c]=b;kvSet(K(c),b);return b}catch{}}return null}
 function fixImgs(el){el.querySelectorAll('img[data-p]').forEach(async i=>{const p=i.dataset.p;if(/^https?:/.test(p)){i.src=p;return}const b=await fileBlob(p);if(b)i.src=URL.createObjectURL(b);else i.alt=p})}
 
 /* ---------- Rendering ---------- */
+const ttl=n=>n.type=='file'?n.file.split('/').pop():n.type=='link'?n.url:(n.text||'').split('\n').map(l=>l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/\[!\w+\][+-]?|^([>#*+\-\s]|\d+\.\s)+|\*\*|`|\[\[|\]\]|~~|==|\$/g,'').trim()).filter(Boolean).slice(0,1).join('');
 function anchor(n,s){return s=='top'?[n.x+n.width/2,n.y]:s=='bottom'?[n.x+n.width/2,n.y+n.height]:s=='left'?[n.x,n.y+n.height/2]:[n.x+n.width,n.y+n.height/2]}
 const DIR={top:[0,-1],bottom:[0,1],left:[-1,0],right:[1,0]};
-function show(text,name){
+function show(text,name,view){
 let c;try{c=JSON.parse(text)}catch{toast('Keine gültige .canvas-Datei');return}
-W.querySelectorAll('.n,.g,.el').forEach(e=>e.remove());ES.innerHTML='';NS=c.nodes||[];const by={};
+W.querySelectorAll('.n,.g,.el').forEach(e=>e.remove());ES.innerHTML='';EG=[];Object.keys(FB).forEach(k=>delete FB[k]);NS=c.nodes||[];const by={};
 const order=[...NS.filter(n=>n.type=='group'),...NS.filter(n=>n.type!='group')];
 for(const n of order){by[n.id]=n;const c1=col(n.color);const d=document.createElement('div');
 d.style.cssText=`left:${n.x}px;top:${n.y}px;width:${n.width}px;height:${n.height}px`;if(c1){d.style.setProperty('--c',c1)}
@@ -119,7 +167,7 @@ else{d.className='n'+(c1?' col':'');
 if(n.type=='file'){d.innerHTML=`<div class="ft">${esc(n.file.split('/').pop())}</div><div class="in"></div>`;loadFile(n,d.querySelector('.in'))}
 else if(n.type=='link')d.innerHTML=`<div class="in"><div class="lk"><div class="mu">Link</div><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.url)}</a></div></div>`;
 else{d.innerHTML=`<div class="in"><div class="md">${md(n.text||'')}</div></div>`;fixImgs(d)}}
-W.appendChild(d)}
+n.tt=n.type=='group'?(n.label||''):ttl(n);W.appendChild(d)}
 /* Edges */
 const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');ES.appendChild(defs);const mk={};
 const marker=c=>{if(mk[c])return mk[c];const id='m'+Object.keys(mk).length;mk[c]=id;defs.insertAdjacentHTML('beforeend',`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`);return id};
@@ -128,40 +176,86 @@ const c1=col(e.color)||'#8a8a8a',fs=e.fromSide||'right',ts=e.toSide||'left';
 const p=anchor(a,fs),q=anchor(b,ts),dist=Math.hypot(p[0]-q[0],p[1]-q[1]),k=Math.min(220,Math.max(40,dist/2));
 const d1=DIR[fs],d2=DIR[ts],c_1=[p[0]+d1[0]*k,p[1]+d1[1]*k],c_2=[q[0]+d2[0]*k,q[1]+d2[1]*k];
 const to=e.toEnd||'arrow',fr=e.fromEnd||'none';
-ES.insertAdjacentHTML('beforeend',`<path d="M${p}C${c_1} ${c_2} ${q}" fill="none" stroke="${c1}" stroke-width="2" stroke-linecap="round" ${to=='arrow'?`marker-end="url(#${marker(c1)})"`:''}/>`);
+const ag=Math.atan2(q[1]-c_2[1],q[0]-c_2[0]);ES.insertAdjacentHTML('beforeend',`<g><path class="e" d="M${p}C${c_1} ${c_2} ${q}" fill="none" stroke="${c1}" stroke-linecap="round"/>${to=='arrow'?`<path class="ah" d="M0 0L-1-.42L-1 .42z" fill="${c1}" style="transform:translate(${q[0]}px,${q[1]}px) rotate(${ag}rad) scale(var(--as))"/>`:''}</g>`);
+EG.push({el:ES.lastElementChild,p,q,c_1,c_2,c:c1,to,label:e.label,x0:Math.min(p[0],q[0],c_1[0],c_2[0]),x1:Math.max(p[0],q[0],c_1[0],c_2[0]),y0:Math.min(p[1],q[1],c_1[1],c_2[1]),y1:Math.max(p[1],q[1],c_1[1],c_2[1])});
 if(e.label){const l=document.createElement('div');l.className='el';l.textContent=e.label;
 l.style.left=(p[0]+3*c_1[0]+3*c_2[0]+q[0])/8+'px';l.style.top=(p[1]+3*c_1[1]+3*c_2[1]+q[1])/8+'px';if(e.color)l.style.borderColor=c1;W.appendChild(l)}}
-bounds();$('#em').hidden=true;['#mm','#fit','#q'].forEach(s=>$(s).hidden=false);$('#ttl').textContent=name;$('#q').value='';search('');fit()}
+bounds();MINK=Math.max(.01,Math.min(.1,Math.min(innerWidth/B.w,innerHeight/B.h)*.4));$('#em').hidden=true;['#mm','#q','#png','#pdf'].forEach(s=>$(s).hidden=false);$('#off').hidden=!cur.repo;$('#ttl').textContent=name;$('#q').value='';search('');if(view){Object.assign(V,view);apply()}else fit();renderOutline()}
 async function loadFile(n,f){const ext=n.file.split('.').pop().toLowerCase(),b=await fileBlob(n.file);
 if(!b){f.innerHTML=`<div class="md"><p class="mu">${cur&&cur.repo?'Datei nicht gefunden':'Nur im Repo-Modus verfügbar'}:<br>${esc(n.file)}</p></div>`;return}
-if(['png','jpg','jpeg','gif','webp','svg','avif'].includes(ext))f.innerHTML=`<img class="fi" src="${URL.createObjectURL(new Blob([b],{type:ext=='svg'?'image/svg+xml':b.type}))}">`;
-else if(ext=='pdf')f.innerHTML=`<iframe src="${URL.createObjectURL(new Blob([b],{type:'application/pdf'}))}"></iframe>`;
+if(['png','jpg','jpeg','gif','webp','svg','avif'].includes(ext)){createImageBitmap(b).then(bm=>{n.bm=bm;apply()}).catch(()=>{});f.innerHTML=`<img class="fi" src="${URL.createObjectURL(new Blob([b],{type:ext=='svg'?'image/svg+xml':b.type}))}">`}
+else if(ext=='pdf'){n.pu=URL.createObjectURL(new Blob([b],{type:'application/pdf'}));f.innerHTML='<div class="md mu">PDF lädt beim Heranzoomen</div>';cull()}
 else{f.innerHTML=`<div class="md">${md(await b.text())}</div>`;fixImgs(f)}}
 function bounds(){if(!NS.length){B={x:0,y:0,w:1,h:1};return}
 const x0=Math.min(...NS.map(n=>n.x)),y0=Math.min(...NS.map(n=>n.y)),x1=Math.max(...NS.map(n=>n.x+n.width)),y1=Math.max(...NS.map(n=>n.y+n.height));B={x:x0,y:y0,w:x1-x0||1,h:y1-y0||1}}
 
 /* ---------- Ansicht ---------- */
-const clampK=k=>Math.min(3,Math.max(.03,k));
-function apply(){W.style.transform=`translate(${V.x}px,${V.y}px) scale(${V.k})`;const s=20*V.k;st.style.backgroundSize=s+'px '+s+'px';st.style.backgroundPosition=`${V.x}px ${V.y}px`;st.style.backgroundImage=s<7?'none':'';mmDraw()}
+const clampK=k=>Math.min(4,Math.max(MINK,k));
+function apply(){W.style.transform=`translate3d(${V.x}px,${V.y}px,0) scale(${V.k})`;const k=V.k;
+W.style.setProperty('--sw',Math.max(1.5,Math.min(3,2*k))/k+'px');W.style.setProperty('--as',Math.min(14,Math.max(8,9*Math.sqrt(k)+2))/k);W.style.setProperty('--ls',Math.min(3,Math.max(1,1/Math.sqrt(k))));
+if(!raf)raf=requestAnimationFrame(cull);clearTimeout(apply.t);apply.t=setTimeout(()=>cur&&localStorage.setItem('cv:view',JSON.stringify(V)),500)}
+function cull(){raf=0;const k=V.k,a=PR||k>=.22?0:k<=.15?1:(.22-k)/.07;
+W.style.display=a>=1?'none':'';W.style.opacity=a>0&&a<1?1-a:'';
+if(a<1){const m=200/k,x0=-V.x/k-m,y0=-V.y/k-m,x1=(innerWidth-V.x)/k+m,y1=(innerHeight-V.y)/k+m;
+for(const n of NS){const v=PR||!(n.x>x1||n.x+n.width<x0||n.y>y1||n.y+n.height<y0);if(v!==n.v){n.v=v;n.el.style.display=v?'':'none'}
+if(v&&n.pu&&a==0&&!n.ifr){n.ifr=1;n.el.querySelector('.in').innerHTML=`<iframe src="${n.pu}"></iframe>`}}
+for(const e of EG){const v=PR||!(e.x0>x1||e.x1<x0||e.y0>y1||e.y1<y0);if(v!==e.v){e.v=v;e.el.style.display=v?'':'none'}}}
+drawGc(a);
+const t=performance.now();if(t-lastMm>100){lastMm=t;mmDraw()}clearTimeout(mt);mt=setTimeout(mmDraw,150)}
+/* Canvas-Ebene: Punktraster + vereinfachte Ansicht */
+const gc=$('#gc'),gx=gc.getContext('2d'),TH={},FN='-apple-system,BlinkMacSystemFont,sans-serif';let DPR=1;
+function theme(){const cs=getComputedStyle(document.documentElement);for(const k of['--bg','--card','--bd','--tx','--dot','--ln'])TH[k]=cs.getPropertyValue(k).trim()}
+function sizeGc(){DPR=Math.min(2,devicePixelRatio||1);gc.width=innerWidth*DPR;gc.height=innerHeight*DPR}
+function hit(cx,cy){const wx=(cx-V.x)/V.k,wy=(cy-V.y)/V.k;for(let i=NS.length-1;i>=0;i--){const n=NS[i];if(n.type!='group'&&wx>=n.x&&wx<=n.x+n.width&&wy>=n.y&&wy<=n.y+n.height)return n}}
+function drawGc(a){const x=gx,w=innerWidth,h=innerHeight,k=V.k,ox=V.x,oy=V.y;x.setTransform(DPR,0,0,DPR,0,0);x.clearRect(0,0,w,h);if(PR)return;
+const s=48*k,al=Math.min(1,Math.max(0,(s-8)/10)),rd=Math.max(.5,Math.min(3.2,1.7*k));
+if(al>.05){x.globalAlpha=al;x.fillStyle=TH['--dot'];x.beginPath();const a0=((ox%s)+s)%s,b0=((oy%s)+s)%s;
+for(let px=a0;px<w+s;px+=s)for(let py=b0;py<h+s;py+=s){x.moveTo(px+rd,py);x.arc(px,py,rd,0,6.2832)}x.fill()}
+x.globalAlpha=1;
+if(a<=0||!NS.length)return;
+const mg=60,lw=Math.max(1.5,Math.min(3,2*k)),A=Math.min(14,Math.max(8,9*Math.sqrt(k)+2)),S=q=>[q[0]*k+ox,q[1]*k+oy],rr=(X,Y,W_,H_,r)=>{x.beginPath();x.roundRect(X,Y,W_,H_,r)};
+const off=(X,Y,W_,H_)=>X>w+mg||X+W_<-mg||Y>h+mg||Y+H_<-mg;
+x.globalAlpha=a;x.lineCap='round';x.lineWidth=lw;
+for(const e of EG){if(off(e.x0*k+ox,e.y0*k+oy,(e.x1-e.x0)*k,(e.y1-e.y0)*k))continue;const p=S(e.p),c1=S(e.c_1),c2=S(e.c_2),q=S(e.q);
+x.strokeStyle=x.fillStyle=e.c;x.beginPath();x.moveTo(...p);x.bezierCurveTo(...c1,...c2,...q);x.stroke();
+if(e.to=='arrow'){const g=Math.atan2(q[1]-c2[1],q[0]-c2[0]);x.beginPath();x.moveTo(...q);x.lineTo(q[0]-A*Math.cos(g-.42),q[1]-A*Math.sin(g-.42));x.lineTo(q[0]-A*Math.cos(g+.42),q[1]-A*Math.sin(g+.42));x.fill()}}
+x.font='600 15px '+FN;x.textBaseline='middle';
+for(const n of NS){if(n.type!='group')continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y-30,Ww,Hh+30))continue;
+const c=col(n.color)||TH['--bd'];rr(X,Y,Ww,Hh,Math.min(14,Ww/6,Hh/6));x.globalAlpha=a*.1;x.fillStyle=c;x.fill();x.globalAlpha=a;x.strokeStyle=c;x.lineWidth=1.5;x.stroke();
+if(n.tt){if(n.tw15==null)n.tw15=x.measureText(n.tt).width;rr(X,Y-30,n.tw15+16,22,8);x.fillStyle=TH['--bg'];x.fill();x.globalAlpha=a*.28;x.fillStyle=c;x.fill();x.globalAlpha=a;x.fillStyle=TH['--tx'];x.fillText(n.tt,X+8,Y-19)}}
+for(const n of NS){if(n.type=='group')continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y,Ww,Hh))continue;
+const c=col(n.color),r=Math.min(8,Ww/4,Hh/4);
+x.shadowColor='rgba(0,0,0,.28)';x.shadowBlur=8;x.shadowOffsetY=2;rr(X,Y,Ww,Hh,r);x.fillStyle=TH['--card'];x.fill();x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;
+if(c){x.globalAlpha=a*.16;x.fillStyle=c;x.fill();x.globalAlpha=a}
+if(n.bm){x.save();rr(X,Y,Ww,Hh,r);x.clip();const sc=Math.min(Ww/n.bm.width,Hh/n.bm.height);x.drawImage(n.bm,X+(Ww-n.bm.width*sc)/2,Y+(Hh-n.bm.height*sc)/2,n.bm.width*sc,n.bm.height*sc);x.restore()}
+else if(n.type=='text'&&Hh>46&&Ww>60){x.globalAlpha=a*.13;x.fillStyle=TH['--tx'];const ws=[.9,.7,.8];for(let i=0,yy=Y+30;i<3&&yy+4<Y+Hh-8;i++,yy+=10){rr(X+8,yy,(Ww-16)*ws[i],4,2);x.fill()}x.globalAlpha=a}
+rr(X,Y,Ww,Hh,r);x.strokeStyle=c||TH['--bd'];x.lineWidth=1.5;x.stroke()}
+x.textBaseline='top';x.lineJoin='round';
+for(const n of NS){if(n.type=='group'||!n.tt)continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y,Ww,Hh))continue;
+if(n.tw14==null){x.font='600 14px '+FN;n.tw14=x.measureText(n.tt).width}
+const av=Ww-16;let fs=14;if(n.tw14>av)fs=Math.max(10,14*av/n.tw14);x.font='600 '+fs+'px '+FN;
+if(n.bm||n.tw14*fs/14>av){x.strokeStyle=TH['--bg'];x.lineWidth=3;x.strokeText(n.tt,X+8,Y+8)}
+x.fillStyle=TH['--tx'];x.fillText(n.tt,X+8,Y+8)}
+x.globalAlpha=1}
 function zoomAt(cx,cy,f){const k=clampK(V.k*f),r=k/V.k;V.x=cx-(cx-V.x)*r;V.y=cy-(cy-V.y)*r;V.k=k}
-function fit(){if(!B)return;const w=innerWidth,h=innerHeight,pad=70;V.k=clampK(Math.min((w-pad*2)/B.w,(h-pad*2-40)/B.h,1));V.x=(w-B.w*V.k)/2-B.x*V.k;V.y=(h-B.h*V.k)/2-B.y*V.k+20;apply()}
+function fit(w=innerWidth,h=innerHeight){if(!B)return;const pad=PR?20:70;V.k=clampK(Math.min((w-pad*2)/B.w,(h-pad*2-40)/B.h,1));V.x=(w-B.w*V.k)/2-B.x*V.k;V.y=(h-B.h*V.k)/2-B.y*V.k+20;apply()}
 function focusNode(n,anim=true){const w=innerWidth,h=innerHeight,k=clampK(Math.min((w-120)/n.width,(h-160)/n.height,1.6));
 const t={x:(w-n.width*k)/2-n.x*k,y:(h-n.height*k)/2-n.y*k,k};if(!anim){Object.assign(V,t);apply();return}
 const s={...V},t0=performance.now();(function f(now){const u=Math.min(1,(now-t0)/280),e=1-Math.pow(1-u,3);V.x=s.x+(t.x-s.x)*e;V.y=s.y+(t.y-s.y)*e;V.k=s.k+(t.k-s.k)*e;apply();if(u<1)requestAnimationFrame(f)})(t0)}
+function inertia(){let last=performance.now();const id=++INER;(function f(now){if(id!==INER)return;const dt=Math.min(32,now-last);last=now;V.x+=VEL.vx*dt;V.y+=VEL.vy*dt;const d=Math.pow(.94,dt/16);VEL.vx*=d;VEL.vy*=d;apply();if(Math.hypot(VEL.vx,VEL.vy)>.02)requestAnimationFrame(f)})(last)}
 /* Gesten */
 const P=new Map();let dn=null,lastTap=0;
-st.addEventListener('pointerdown',e=>{st.setPointerCapture(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);if(P.size==1)dn={t:e.timeStamp,x:e.clientX,y:e.clientY,el:e.target,moved:false};else dn&&(dn.moved=true)});
+st.addEventListener('pointerdown',e=>{INER++;VEL={vx:0,vy:0,t:e.timeStamp};st.setPointerCapture(e.pointerId);P.set(e.pointerId,[e.clientX,e.clientY]);if(P.size==1)dn={t:e.timeStamp,x:e.clientX,y:e.clientY,el:e.target,moved:false};else dn&&(dn.moved=true)});
 st.addEventListener('pointermove',e=>{const o=P.get(e.pointerId);if(!o)return;const n=[e.clientX,e.clientY];
 if(dn&&Math.hypot(n[0]-dn.x,n[1]-dn.y)>8)dn.moved=true;
-if(P.size==1){V.x+=n[0]-o[0];V.y+=n[1]-o[1]}
+if(P.size==1){V.x+=n[0]-o[0];V.y+=n[1]-o[1];const dt=Math.max(1,e.timeStamp-VEL.t);VEL={vx:(n[0]-o[0])/dt,vy:(n[1]-o[1])/dt,t:e.timeStamp}}
 else if(P.size==2){const o2=P.get([...P.keys()].find(i=>i!=e.pointerId)),d0=Math.hypot(o[0]-o2[0],o[1]-o2[1])||1,d1=Math.hypot(n[0]-o2[0],n[1]-o2[1])||1;
 V.x+=(n[0]-o[0])/2;V.y+=(n[1]-o[1])/2;zoomAt((n[0]+o2[0])/2,(n[1]+o2[1])/2,d1/d0)}
 P.set(e.pointerId,n);apply()});
-const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);
+const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);if(!P.size&&!(dn&&!dn.moved)&&e.type=='pointerup'&&e.timeStamp-VEL.t<70&&Math.hypot(VEL.vx,VEL.vy)>.15)inertia();
 if(dn&&!dn.moved&&e.type=='pointerup'&&e.timeStamp-dn.t<350){const a=dn.el.closest&&dn.el.closest('a');
 if(a){window.open(a.href,'_blank');dn=null;return}
-const nd=dn.el.closest&&dn.el.closest('.n');
-if(nd&&e.timeStamp-lastTap<320){const n=NS.find(x=>x.el===nd);n&&focusNode(n);lastTap=0}else lastTap=e.timeStamp}
+if(e.timeStamp-lastTap<320){const n=hit(e.clientX,e.clientY);n?focusNode(n):fit();lastTap=0}else lastTap=e.timeStamp}
 if(!P.size)dn=null};
 st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
 st.addEventListener('wheel',e=>{e.preventDefault();if(e.ctrlKey||e.metaKey)zoomAt(e.clientX,e.clientY,Math.exp(-e.deltaY*.01));else{V.x-=e.deltaX;V.y-=e.deltaY}apply()},{passive:false});
@@ -177,29 +271,90 @@ mm.addEventListener('pointerdown',e=>{mm.setPointerCapture(e.pointerId);mm._d=1;
 function search(q){q=q.trim().toLowerCase();HITS=[];hi=0;for(const n of NS){const m=q&&n.s.includes(q);n.el.classList.toggle('hit',!!m);n.el.classList.toggle('dim',!!q&&!m&&n.type!='group');if(m)HITS.push(n)}}
 $('#q').addEventListener('input',e=>search(e.target.value));
 $('#q').addEventListener('keydown',e=>{if(e.key=='Enter'&&HITS.length){focusNode(HITS[hi%HITS.length]);hi++;e.target.blur()}});
-$('#fit').onclick=fit;
+
 
 /* ---------- Öffnen / Repo-Browser ---------- */
-const pn=$('#pn'),openP=()=>{$('#rp').value=cfg.repo||'';$('#br').value=cfg.branch||'';$('#tk').value=cfg.token||'';pn.hidden=false;renderRec()};
+const pn=$('#pn'),openP=()=>{const g=ld('cv:gh',{});$('#rp').value=g.repo||'';$('#br').value=g.branch||'';$('#tk').value=cfg.token||'';pn.hidden=false;$('#src').value=localStorage.getItem('cv:src')||'self';setSrc($('#src').value)};
 $('#mn').onclick=$('#em1').onclick=openP;$('#cl').onclick=()=>pn.hidden=true;pn.addEventListener('pointerdown',e=>{if(e.target===pn)pn.hidden=true});
-async function ls(path){try{const a=await(await gh(path)).json();if(!Array.isArray(a))throw new Error('kein Ordner');
+async function ls(path){try{const a=await dirList(path);if(!Array.isArray(a))throw new Error('kein Ordner');
 a.sort((x,y)=>(y.type=='dir')-(x.type=='dir')||x.name.localeCompare(y.name));
-const items=[...(path?[{n:'↑ ..',t:'dir',p:path.split('/').slice(0,-1).join('/')}]:[]),...a.filter(f=>f.type=='dir'||f.name.endsWith('.canvas')).map(f=>({n:f.name,t:f.type,p:f.path}))];
-$('#cr').textContent=cfg.repo+'/'+path;const L=$('#ls');L.innerHTML='';
+const items=[...(path&&!(cfg.repo=='@self'&&path=='canvases')?[{n:'↑ ..',t:'dir',p:path.split('/').slice(0,-1).join('/')}]:[]),...a.filter(f=>f.type=='dir'||f.name.endsWith('.canvas')).map(f=>({n:f.name,t:f.type,p:f.path}))];
+$('#cr').textContent=(cfg.repo=='@self'?'Dieses Repo':cfg.repo)+'/'+path;const L=$('#ls');L.innerHTML='';
 if(!items.length)L.innerHTML='<div class="mu">Keine .canvas-Dateien oder Ordner hier.</div>';
 items.forEach(i=>{const b=document.createElement('button');b.className='it';b.textContent=(i.t=='dir'&&i.n[0]!='↑'?'📁 ':i.t=='file'?'◧ ':'')+i.n;b.onclick=()=>i.t=='dir'?ls(i.p):openCanvas(i.p);L.appendChild(b)})}
 catch(e){toast('Repo nicht lesbar ('+e.message+'). Privat? Token eintragen.')}}
 $('#go').onclick=()=>{cfg={repo:$('#rp').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\.git$/,''),branch:$('#br').value.trim(),token:$('#tk').value.trim()};
-if(!/^[^/]+\/[^/]+$/.test(cfg.repo))return toast('Format: Besitzer/Repository');localStorage.setItem('cv:cfg',JSON.stringify(cfg));ls('')};
+if(!/^[^/]+\/[^/]+$/.test(cfg.repo))return toast('Format: Besitzer/Repository');localStorage.setItem('cv:cfg',JSON.stringify(cfg));localStorage.setItem('cv:gh',JSON.stringify({repo:cfg.repo,branch:cfg.branch}));ls('')};
 async function openCanvas(path){cur={repo:cfg.repo,branch:cfg.branch,path};const key='cv:c:'+cfg.repo+'@'+cfg.branch+':'+path;let t;
-try{t=await(await gh(path,true)).text();try{localStorage.setItem(key,t)}catch{toast('Cache voll: Canvas wird nicht offline gespeichert')}}
-catch(e){t=localStorage.getItem(key);if(!t)return toast('Laden fehlgeschlagen ('+e.message+')');toast('Offline: gespeicherte Version')}
-rec=[{repo:cfg.repo,branch:cfg.branch,path},...rec.filter(r=>!(r.repo==cfg.repo&&r.path==path&&r.branch==cfg.branch))].slice(0,12);localStorage.setItem('cv:rec',JSON.stringify(rec));
-pn.hidden=true;show(t,path.split('/').pop())}
+try{t=await(await gh(path,true)).text();kvSet(key,t)}
+catch(e){t=await kvGet(key);if(!t)return toast('Laden fehlgeschlagen ('+e.message+')');toast('Offline: gespeicherte Version')}
+rec=[{repo:cfg.repo,branch:cfg.branch,path},...rec.filter(r=>!(r.repo==cfg.repo&&r.path==path&&r.branch==cfg.branch))].slice(0,20);localStorage.setItem('cv:rec',JSON.stringify(rec));
+localStorage.setItem('cv:last',JSON.stringify({repo:cfg.repo,branch:cfg.branch,path,key,name:path.split('/').pop()}));pn.hidden=true;show(t,path.split('/').pop());renderSb()}
 function renderRec(){const L=$('#rc');L.innerHTML=rec.length?'':'<div class="mu">Noch nichts geöffnet.</div>';
-rec.forEach(r=>{const b=document.createElement('button');b.className='it';b.innerHTML=`${esc(r.path.split('/').pop())}<div class="mu" style="font-size:12px">${esc(r.repo)}${r.branch?' @ '+esc(r.branch):''}</div>`;
+rec.forEach(r=>{const b=document.createElement('button');b.className='it';b.innerHTML=`${esc(r.path.split('/').pop())}<div class="mu" style="font-size:12px">${esc(rl(r))}</div>`;
 b.onclick=()=>{cfg={...cfg,repo:r.repo,branch:r.branch};localStorage.setItem('cv:cfg',JSON.stringify(cfg));openCanvas(r.path)};L.appendChild(b)})}
-$('#lf').onchange=async e=>{const f=e.target.files[0];if(!f)return;cur={local:true};pn.hidden=true;show(await f.text(),f.name);e.target.value=''};
+$('#lf').onchange=async e=>{const f=e.target.files[0];if(!f)return;const t=await f.text(),key='cv:c:local:'+f.name;cur={local:true};kvSet(key,t);localStorage.setItem('cv:last',JSON.stringify({local:1,key,name:f.name}));pn.hidden=true;show(t,f.name);addRec({local:1,key,name:f.name});e.target.value=''};
 addEventListener('resize',apply);
-if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+theme();sizeGc();addEventListener('resize',()=>{sizeGc();apply()});matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{theme();apply()});
+const SELF=(()=>{const h=location.hostname;if(!h.endsWith('.github.io'))return'';const sg=location.pathname.split('/')[1];return h.split('.')[0]+'/'+(sg&&!sg.includes('.')?sg:h)})();
+async function dirList(path){if(cfg.repo!='@self')return(await gh(path)).json();
+if(SELF){try{const h={Accept:'application/vnd.github+json'};if(cfg.token)h.Authorization='Bearer '+cfg.token;const r=await fetch(`https://api.github.com/repos/${SELF}/contents/${path.split('/').map(encodeURIComponent).join('/')}`,{headers:h});if(r.ok)return r.json()}catch{}}
+const r=await fetch('canvases/index.json');if(!r.ok)throw new Error('canvases/index.json fehlt');return(await r.json()).map(n=>({name:n,type:'file',path:'canvases/'+n}))}
+function setSrc(v){$('#sgh').hidden=v!='gh';$('#lw').hidden=v=='rec';$('#rcw').hidden=v!='rec';
+if(v=='self'){cfg={...cfg,repo:'@self',branch:''};localStorage.setItem('cv:cfg',JSON.stringify(cfg));ls('canvases')}
+if(v=='gh'){$('#ls').innerHTML='';$('#cr').textContent=''}if(v=='rec')renderRec()}
+$('#src').onchange=e=>{localStorage.setItem('cv:src',e.target.value);setSrc(e.target.value)};
+const rl=r=>r.local?'Lokale Datei':r.repo=='@self'?'Dieses Repo':r.repo+(r.branch?' @ '+r.branch:'');
+/* Outliner */
+const sb=$('#sb'),rk=r=>r.local?r.key:'cv:c:'+r.repo+'@'+(r.branch||'')+':'+r.path;
+$('#sbt').onclick=()=>{sb.hidden=!sb.hidden;if(!sb.hidden)renderSb()};$('#sbx').onclick=()=>sb.hidden=true;
+function addRec(r){rec=[r,...rec.filter(x=>rk(x)!=rk(r))].slice(0,20);localStorage.setItem('cv:rec',JSON.stringify(rec));renderSb()}
+async function openRec(r){
+if(r.local){const t=await kvGet(r.key);if(!t)return toast('Datei nicht mehr gespeichert');cur={local:true};localStorage.setItem('cv:last',JSON.stringify({local:1,key:r.key,name:r.name}));show(t,r.name);addRec(r)}
+else{cfg={...cfg,repo:r.repo,branch:r.branch||''};localStorage.setItem('cv:cfg',JSON.stringify(cfg));await openCanvas(r.path)}
+if(innerWidth<700)sb.hidden=true}
+function renderSb(){const lk=(ld('cv:last',null)||{}).key,R=$('#sr');R.innerHTML=rec.length?'':'<div class="mu s">Noch nichts geöffnet.</div>';
+rec.forEach(r=>{const d=document.createElement('div');d.className='it2'+(rk(r)==lk?' on':'');
+d.innerHTML=`<div class="t">${esc(r.local?r.name:r.path.split('/').pop())}</div><div class="mu s">${esc(rl(r))}</div>`;
+d.onclick=()=>openRec(r);const x=document.createElement('button');x.textContent='✕';x.onclick=e=>{e.stopPropagation();rec=rec.filter(y=>y!==r);localStorage.setItem('cv:rec',JSON.stringify(rec));renderSb()};d.appendChild(x);R.appendChild(d)});
+renderOutline()}
+function renderOutline(){const O=$('#so');O.innerHTML='';if(!NS.length){O.innerHTML='<div class="mu s">Kein Canvas geöffnet.</div>';return}
+const gs=NS.filter(n=>n.type=='group'),rd=(a,b)=>a.y-b.y||a.x-b.x,ch=new Map(gs.sort(rd).map(g=>[g,[]])),free=[];
+for(const n of NS){if(n.type=='group')continue;const cx=n.x+n.width/2,cy=n.y+n.height/2;let b=null;
+for(const g of gs)if(cx>=g.x&&cx<=g.x+g.width&&cy>=g.y&&cy<=g.y+g.height&&(!b||g.width*g.height<b.width*b.height))b=g;b?ch.get(b).push(n):free.push(n)}
+const add=(n,c)=>{const d=document.createElement('div');d.className='ol '+c;d.textContent=n.type=='group'?n.label||'Gruppe':ttl(n)||'(leer)';d.onclick=()=>{focusNode(n);if(innerWidth<700)sb.hidden=true};O.appendChild(d)};
+for(const g of gs){add(g,'g');ch.get(g).sort(rd).forEach(n=>add(n,'c'))}
+if(free.length){if(gs.length){const h=document.createElement('div');h.className='ol g mu';h.textContent='Ohne Gruppe';O.appendChild(h)}free.sort(rd).forEach(n=>add(n,gs.length?'c':''))}}
+renderSb();
+/* Offline, Export, Wiederherstellen */
+$('#off').onclick=async()=>{const fs=NS.filter(n=>n.type=='file');let i=0,ok=0;for(const n of fs){toast(`Lade ${++i}/${fs.length} …`);if(await fileBlob(n.file,true))ok++}toast(`${ok} von ${fs.length} Dateien offline gespeichert`)};
+const endPrint=()=>{if(!PR)return;PR=0;document.body.classList.remove('pr');st.style.width=st.style.height='';Object.assign(V,PV);apply()};
+addEventListener('afterprint',endPrint);st.addEventListener('pointerdown',endPrint,true);
+$('#pdf').onclick=()=>{PV={...V};PR=1;document.body.classList.add('pr');st.style.width='1587px';st.style.height='1123px';fit(1587,1123);cull();toast('Teilen → „Sichern als PDF“ bzw. Drucken wählen');setTimeout(()=>print(),400)};
+function wrap(x,n,t,tx){let y=n.y+10;const mw=n.width-32;
+for(let l of t.split('\n')){const hd=l.match(/^(#{1,6})\s/),sz=hd?[0,28,24,20,18,16,16][hd[1].length]:16,lh=sz*1.4;
+l=l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/^#+\s|\*\*|`|\[\[|\]\]|~~|==/g,'').replace(/^\s*[-*+]\s+/,'• ');x.font=(hd?'700 ':'')+sz+'px -apple-system,sans-serif';x.fillStyle=tx;
+if(!l.trim()){y+=8;continue}let ln='';
+for(const w of l.split(' ')){const u=ln?ln+' '+w:w;if(x.measureText(u).width>mw&&ln){y+=lh;if(y-sz>n.y+n.height)return;x.fillText(ln,n.x+16,y);ln=w}else ln=u}
+y+=lh;if(y-sz>n.y+n.height)return;x.fillText(ln,n.x+16,y)}}
+$('#png').onclick=async()=>{if(!B)return;toast('Erstelle PNG …');
+const cs=getComputedStyle(document.documentElement),v=k=>cs.getPropertyValue(k).trim(),pad=60,w=B.w+pad*2,h=B.h+pad*2,s=Math.min(2,Math.sqrt(1.4e7/(w*h)),7800/Math.max(w,h));
+const c=document.createElement('canvas');c.width=w*s|0;c.height=h*s|0;const x=c.getContext('2d');x.scale(s,s);x.fillStyle=v('--bg');x.fillRect(0,0,w,h);x.translate(pad-B.x,pad-B.y);
+const F='-apple-system,BlinkMacSystemFont,sans-serif',tint=(k,a)=>{x.globalAlpha=a;x.fillStyle=k;x.fill();x.globalAlpha=1},rr=(n,r)=>{x.beginPath();x.roundRect(n.x,n.y,n.width,n.height,r)};
+for(const n of NS.filter(n=>n.type=='group')){const k=col(n.color)||v('--bd');rr(n,14);tint(k,.08);x.strokeStyle=k;x.lineWidth=2;x.stroke();if(n.label){x.font='15px '+F;x.fillStyle=v('--tx');x.fillText(n.label,n.x+8,n.y-12)}}
+x.lineWidth=2;
+for(const e of EG){x.strokeStyle=x.fillStyle=e.c;x.beginPath();x.moveTo(...e.p);x.bezierCurveTo(...e.c_1,...e.c_2,...e.q);x.stroke();
+if(e.to=='arrow'){const a=Math.atan2(e.q[1]-e.c_2[1],e.q[0]-e.c_2[0]);x.beginPath();x.moveTo(...e.q);x.lineTo(e.q[0]-10*Math.cos(a-.4),e.q[1]-10*Math.sin(a-.4));x.lineTo(e.q[0]-10*Math.cos(a+.4),e.q[1]-10*Math.sin(a+.4));x.fill()}
+if(e.label){const m=[(e.p[0]+3*e.c_1[0]+3*e.c_2[0]+e.q[0])/8,(e.p[1]+3*e.c_1[1]+3*e.c_2[1]+e.q[1])/8];x.font='13px '+F;const tw=x.measureText(e.label).width;x.fillStyle=v('--bg');x.fillRect(m[0]-tw/2-8,m[1]-11,tw+16,22);x.fillStyle=v('--tx');x.fillText(e.label,m[0]-tw/2,m[1]+4)}}
+for(const n of NS.filter(n=>n.type!='group')){const k=col(n.color)||v('--bd');rr(n,8);x.fillStyle=v('--card');x.fill();if(n.color)tint(k,.09);
+x.save();rr(n,8);x.clip();
+if(n.type=='file'){const b=await fileBlob(n.file);if(b&&b.type.startsWith('image')){try{const im=await createImageBitmap(b),r=Math.min(n.width/im.width,n.height/im.height);x.drawImage(im,n.x+(n.width-im.width*r)/2,n.y+(n.height-im.height*r)/2,im.width*r,im.height*r)}catch{}}else wrap(x,n,b&&/\.(md|txt)$/.test(n.file)?await b.text():n.file,v('--tx'))}
+else wrap(x,n,n.type=='link'?n.url:n.text||'',v('--tx'));
+x.restore();rr(n,8);x.strokeStyle=k;x.lineWidth=2;x.stroke()}
+const bl=await new Promise(r=>c.toBlob(r,'image/png')),nm=($('#ttl').textContent||'canvas').replace(/\.canvas$/,'')+'.png',f=new File([bl],nm,{type:'image/png'});
+const dl=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=nm;a.click()};
+if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(dl);else dl();toast('PNG fertig')};
+(async()=>{const l=ld('cv:last',null);if(!l)return;cur=l.local?{local:true}:{repo:l.repo,branch:l.branch,path:l.path};if(!l.local)cfg={...cfg,repo:l.repo,branch:l.branch};
+const t=await kvGet(l.key);if(t)show(t,l.name,ld('cv:view',null))})();
+if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js?v=7').catch(()=>{});
 </script></body></html>
