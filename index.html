@@ -6,10 +6,11 @@
 <meta name="apple-mobile-web-app-title" content="Canvas">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Canvas Viewer</title>
+<script>try{var t=localStorage.getItem("cv:theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="katex/katex.min.css"><script src="katex/katex.min.js"></script>
 <style>
 :root{--bg:#fff;--dot:#d6d6d6;--card:#fff;--bd:#b9b9b9;--tx:#222;--mu:#808080;--ui:rgba(246,246,246,.88);--ln:#e0e0e0;--ac:#7c5cdb;color-scheme:light}
-@media(prefers-color-scheme:dark){:root{--bg:#1e1e1e;--dot:#363636;--card:#1e1e1e;--bd:#5a5a5a;--tx:#dadada;--mu:#8a8a8a;--ui:rgba(36,36,36,.88);--ln:#3a3a3a;--ac:#a68af9;color-scheme:dark}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1e1e;--dot:#363636;--card:#1e1e1e;--bd:#5a5a5a;--tx:#dadada;--mu:#8a8a8a;--ui:rgba(36,36,36,.88);--ln:#3a3a3a;--ac:#a68af9;color-scheme:dark}}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;-webkit-text-size-adjust:100%}
 #st{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
@@ -67,22 +68,26 @@ center{display:block;text-align:center}.lod .lt{display:block;position:absolute;
 @media print{#sb,#gc{display:none!important}}
 #gc{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}#es .e{stroke-width:var(--sw,2px)}.ah{transform-origin:0 0}
 select{font:inherit;background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;width:100%}#sgh{display:flex;flex-direction:column;gap:8px}
+:root[data-theme="dark"]{--bg:#1e1e1e;--dot:#363636;--card:#1e1e1e;--bd:#5a5a5a;--tx:#dadada;--mu:#8a8a8a;--ui:rgba(36,36,36,.88);--ln:#3a3a3a;--ac:#a68af9;color-scheme:dark}
+.og{margin-bottom:6px}.ol.g{display:flex;gap:6px;align-items:center;margin-top:0}.chev{width:20px;text-align:center;color:var(--mu);flex:none;padding:4px 0}.ol .tx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.oc{margin:0 0 0 12px;padding-left:8px;border-left:1px solid var(--ln)}.oc .ol{font-weight:400}.cnt{color:var(--mu);font-weight:400;font-size:12px}.ol sub,.ol sup{font-size:.7em;line-height:0}
+#rcw .bt{display:block;text-align:center;margin-bottom:8px}
 [hidden]{display:none!important}
 </style></head><body>
 <div id="st"><canvas id="gc"></canvas><div id="w"><svg id="es"></svg></div></div>
-<div id="bar"><button id="sbt">Outliner</button><button id="mn">Öffnen</button><div id="ttl"></div><input id="q" type="search" placeholder="Suchen" enterkeyhint="search" hidden><button id="png" hidden>PNG</button><button id="pdf" hidden>PDF</button><button id="off" hidden>Offline</button></div>
+<div id="bar"><button id="mn">Öffnen</button><button id="sbt">Outliner</button><div id="ttl"></div><input id="q" type="search" placeholder="Suchen" enterkeyhint="search" hidden><button id="png" hidden>PNG</button><button id="pdf" hidden>PDF</button><button id="off" hidden>Offline</button><button id="thm" title="Hell/Dunkel">☾</button></div>
 <canvas id="mm" width="320" height="220" hidden></canvas>
 <div id="em"><div style="font-size:20px;color:var(--tx)">Kein Canvas geöffnet</div><div>Wähle ein Repository oder eine lokale .canvas-Datei.</div><button id="em1">Canvas öffnen</button></div>
-<div id="sb" hidden><div class="sbh"><b>Outliner</b><button id="sbx">Schließen</button></div><h4>Zuletzt geöffnet</h4><div id="sr"></div><h4>Gliederung</h4><div id="so"></div></div>
+<div id="sb" hidden><div class="sbh"><b>Outliner</b><button id="sbx">Schließen</button></div><h4>Gliederung</h4><div id="so"></div></div>
 <div id="pn" hidden><div class="sh">
-<h3>Canvas öffnen <span class="mu s">v7</span></h3>
-<select id="src"><option value="self">Dieses Repo (canvases/)</option><option value="gh">Anderes GitHub-Repo</option><option value="rec">Zuletzt geöffnet</option></select>
+<h3>Canvas öffnen <span class="mu s">v8</span></h3>
+<select id="src"><option value="rec">Lokale Daten</option><option value="self">Dieses Repo (canvases/)</option><option value="gh">Anderes GitHub-Repo</option></select>
 <div id="sgh" hidden><input id="rp" type="text" placeholder="Besitzer/Repository" autocapitalize="off" autocorrect="off">
 <div class="row"><input id="br" type="text" placeholder="Branch (optional)" autocapitalize="off"><input id="tk" type="password" placeholder="Token (nur für private Repos)"></div>
 <button id="go">Repository laden</button></div>
-<div class="row"><label class="bt">Lokale Datei<input id="lf" type="file" hidden></label><button id="cl">Schließen</button></div>
+<div class="row"><button id="cl">Schließen</button></div>
 <div id="lw"><div id="cr" class="mu"></div><div id="ls"></div></div>
-<div id="rcw" hidden><div id="rc"></div></div>
+<div id="rcw"><label class="bt">Neue lokale Datei öffnen<input id="lf" type="file" hidden></label><div id="rc"></div></div>
 </div></div>
 <div id="ct" hidden></div>
 <script>
@@ -91,7 +96,7 @@ const COL={1:'#fb464c',2:'#e9973f',3:'#e0de71',4:'#44cf6e',5:'#53dfdd',6:'#a882f
 const col=c=>c?(COL[c]||c):null;
 const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
 let cfg=ld('cv:cfg',{}),rec=ld('cv:rec',[]),cur=null,V={x:0,y:0,k:1},NS=[],B=null,MS=null,HITS=[],hi=0;
-const FB={};let EG=[],PR=0,PV=null,raf=0,lastMm=0,mt=0,MINK=.03,VEL={vx:0,vy:0,t:0},INER=0;
+const FB={};let EG=[],PR=0,PV=null,raf=0,lastMm=0,mt=0,MINK=.03,VEL={vx:0,vy:0,t:0},INER=0,OC=new Set();
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function toast(t){const e=$('#ct');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2800)}
 
@@ -152,12 +157,23 @@ for(const c of cs){try{const b=await(await gh(c,true)).blob();FB[c]=b;kvSet(K(c)
 function fixImgs(el){el.querySelectorAll('img[data-p]').forEach(async i=>{const p=i.dataset.p;if(/^https?:/.test(p)){i.src=p;return}const b=await fileBlob(p);if(b)i.src=URL.createObjectURL(b);else i.alt=p})}
 
 /* ---------- Rendering ---------- */
-const ttl=n=>n.type=='file'?n.file.split('/').pop():n.type=='link'?n.url:(n.text||'').split('\n').map(l=>l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/\[!\w+\][+-]?|^([>#*+\-\s]|\d+\.\s)+|\*\*|`|\[\[|\]\]|~~|==|\$/g,'').trim()).filter(Boolean).slice(0,1).join('');
+const GR={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',varepsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',vartheta:'ϑ',iota:'ι',kappa:'κ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',upsilon:'υ',phi:'φ',varphi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω',cdot:'·',times:'×',to:'→',rightarrow:'→',leftarrow:'←',pm:'±',approx:'≈',neq:'≠',leq:'≤',geq:'≥',infty:'∞',circ:'°',degree:'°',partial:'∂',nabla:'∇',ldots:'…',dots:'…',ominus:'⊖',oplus:'⊕',rightleftharpoons:'⇌',equiv:'≡',sim:'∼'};
+function tex(s){return s.replace(/\\textcolor\{[^}]*\}\{([^}]*)\}/g,'$1').replace(/\\color\{[^}]*\}/g,'')
+.replace(/\\(?:mathrm|mathbf|mathit|mathcal|mathbb|text|textbf|textit|operatorname|boldsymbol)\s*\{([^}]*)\}/g,'$1')
+.replace(/\\frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g,'$1/$2').replace(/\\sqrt\s*\{([^{}]*)\}/g,'√($1)')
+.replace(/\\(?:left|right|bigg?|Bigg?)(?![A-Za-z])/g,'').replace(/\\[,;:! ]/g,' ').replace(/\\q?quad(?![A-Za-z])/g,' ')
+.replace(/\\([A-Za-z]+)/g,(m,c)=>GR[c]||'')
+.replace(/_\{([^{}]*)\}|_([^\s{}\\])/g,(m,a,b)=>'\uE000'+(a!=null?a:b)+'\uE001')
+.replace(/\^\{([^{}]*)\}|\^([^\s{}\\])/g,(m,a,b)=>'\uE002'+(a!=null?a:b)+'\uE003')
+.replace(/[{}\\]/g,'').replace(/\s+/g,' ')}
+const tx=l=>{l=l.replace(/\$\$?([^$]+?)\$\$?/g,(m,a)=>tex(a));if(/\\[A-Za-z]/.test(l))l=tex(l);return l.replace(/<\/?[a-z][^>]*>/gi,'').replace(/\[!\w+\][+-]?|^([>#*+\-\s]|\d+\.\s)+|\*\*|`|\[\[|\]\]|~~|==|\$/g,'').trim()};
+const mkh=t=>esc(t).replace(/\uE000/g,'<sub>').replace(/\uE001/g,'</sub>').replace(/\uE002/g,'<sup>').replace(/\uE003/g,'</sup>');
+const ttl=n=>n.type=='file'?n.file.split('/').pop():n.type=='link'?n.url:((n.text||'').split('\n').map(tx).filter(Boolean)[0]||'');
 function anchor(n,s){return s=='top'?[n.x+n.width/2,n.y]:s=='bottom'?[n.x+n.width/2,n.y+n.height]:s=='left'?[n.x,n.y+n.height/2]:[n.x+n.width,n.y+n.height/2]}
 const DIR={top:[0,-1],bottom:[0,1],left:[-1,0],right:[1,0]};
 function show(text,name,view){
 let c;try{c=JSON.parse(text)}catch{toast('Keine gültige .canvas-Datei');return}
-W.querySelectorAll('.n,.g,.el').forEach(e=>e.remove());ES.innerHTML='';EG=[];Object.keys(FB).forEach(k=>delete FB[k]);NS=c.nodes||[];const by={};
+OC.clear();W.querySelectorAll('.n,.g,.el').forEach(e=>e.remove());ES.innerHTML='';EG=[];Object.keys(FB).forEach(k=>delete FB[k]);NS=c.nodes||[];const by={};
 const order=[...NS.filter(n=>n.type=='group'),...NS.filter(n=>n.type!='group')];
 for(const n of order){by[n.id]=n;const c1=col(n.color);const d=document.createElement('div');
 d.style.cssText=`left:${n.x}px;top:${n.y}px;width:${n.width}px;height:${n.height}px`;if(c1){d.style.setProperty('--c',c1)}
@@ -167,7 +183,7 @@ else{d.className='n'+(c1?' col':'');
 if(n.type=='file'){d.innerHTML=`<div class="ft">${esc(n.file.split('/').pop())}</div><div class="in"></div>`;loadFile(n,d.querySelector('.in'))}
 else if(n.type=='link')d.innerHTML=`<div class="in"><div class="lk"><div class="mu">Link</div><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.url)}</a></div></div>`;
 else{d.innerHTML=`<div class="in"><div class="md">${md(n.text||'')}</div></div>`;fixImgs(d)}}
-n.tt=n.type=='group'?(n.label||''):ttl(n);W.appendChild(d)}
+n.tt=n.type=='group'?tx(n.label||''):ttl(n);W.appendChild(d)}
 /* Edges */
 const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');ES.appendChild(defs);const mk={};
 const marker=c=>{if(mk[c])return mk[c];const id='m'+Object.keys(mk).length;mk[c]=id;defs.insertAdjacentHTML('beforeend',`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`);return id};
@@ -207,8 +223,13 @@ const gc=$('#gc'),gx=gc.getContext('2d'),TH={},FN='-apple-system,BlinkMacSystemF
 function theme(){const cs=getComputedStyle(document.documentElement);for(const k of['--bg','--card','--bd','--tx','--dot','--ln'])TH[k]=cs.getPropertyValue(k).trim()}
 function sizeGc(){DPR=Math.min(2,devicePixelRatio||1);gc.width=innerWidth*DPR;gc.height=innerHeight*DPR}
 function hit(cx,cy){const wx=(cx-V.x)/V.k,wy=(cy-V.y)/V.k;for(let i=NS.length-1;i>=0;i--){const n=NS[i];if(n.type!='group'&&wx>=n.x&&wx<=n.x+n.width&&wy>=n.y&&wy<=n.y+n.height)return n}}
+function runsOf(t){const R=[];let m=0,cur='';for(const ch of t){if(ch>='\uE000'&&ch<='\uE003'){if(cur)R.push([cur,m]);cur='';m=ch=='\uE000'?1:ch=='\uE002'?-1:0}else cur+=ch}if(cur)R.push([cur,m]);return R}
+function tw(R,fs){let w=0;for(const[t,m]of R){gx.font='600 '+(m?.7*fs:fs)+'px '+FN;w+=gx.measureText(t).width}return w}
+function lz(n){if(n.R==null){n.R=runsOf(n.tt);n.tw14=Math.max(1,tw(n.R,14))}}
+function dr(R,fs,X,Y,halo,mid){const x=gx;let cx=X;for(const[t,m]of R){const f=m?.7*fs:fs;x.font='600 '+f+'px '+FN;const yy=Y+(m&&!mid?(fs-f)*.8:0)+(m==1?fs*.2:m==-1?-fs*.3:0);
+if(halo){x.strokeStyle=TH['--bg'];x.lineWidth=3;x.lineJoin='round';x.strokeText(t,cx,yy)}x.fillText(t,cx,yy);cx+=x.measureText(t).width}}
 function drawGc(a){const x=gx,w=innerWidth,h=innerHeight,k=V.k,ox=V.x,oy=V.y;x.setTransform(DPR,0,0,DPR,0,0);x.clearRect(0,0,w,h);if(PR)return;
-const s=48*k,al=Math.min(1,Math.max(0,(s-8)/10)),rd=Math.max(.5,Math.min(3.2,1.7*k));
+const s=48*k,al=Math.min(1,Math.max(0,(s-8)/10)),rd=Math.min(4,1.7*k);
 if(al>.05){x.globalAlpha=al;x.fillStyle=TH['--dot'];x.beginPath();const a0=((ox%s)+s)%s,b0=((oy%s)+s)%s;
 for(let px=a0;px<w+s;px+=s)for(let py=b0;py<h+s;py+=s){x.moveTo(px+rd,py);x.arc(px,py,rd,0,6.2832)}x.fill()}
 x.globalAlpha=1;
@@ -222,7 +243,7 @@ if(e.to=='arrow'){const g=Math.atan2(q[1]-c2[1],q[0]-c2[0]);x.beginPath();x.move
 x.font='600 15px '+FN;x.textBaseline='middle';
 for(const n of NS){if(n.type!='group')continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y-30,Ww,Hh+30))continue;
 const c=col(n.color)||TH['--bd'];rr(X,Y,Ww,Hh,Math.min(14,Ww/6,Hh/6));x.globalAlpha=a*.1;x.fillStyle=c;x.fill();x.globalAlpha=a;x.strokeStyle=c;x.lineWidth=1.5;x.stroke();
-if(n.tt){if(n.tw15==null)n.tw15=x.measureText(n.tt).width;rr(X,Y-30,n.tw15+16,22,8);x.fillStyle=TH['--bg'];x.fill();x.globalAlpha=a*.28;x.fillStyle=c;x.fill();x.globalAlpha=a;x.fillStyle=TH['--tx'];x.fillText(n.tt,X+8,Y-19)}}
+if(n.tt){lz(n);const gf=Math.max(8,Math.min(15,(Ww-16)/n.tw14*14)),cw=n.tw14*gf/14+16,chh=gf+9;rr(X,Y-chh-6,cw,chh,Math.min(8,chh/2));x.fillStyle=TH['--bg'];x.fill();x.globalAlpha=a*.28;x.fillStyle=c;x.fill();x.globalAlpha=a;x.fillStyle=TH['--tx'];x.textBaseline='middle';dr(n.R,gf,X+8,Y-chh/2-6,0,1);x.textBaseline='top'}}
 for(const n of NS){if(n.type=='group')continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y,Ww,Hh))continue;
 const c=col(n.color),r=Math.min(8,Ww/4,Hh/4);
 x.shadowColor='rgba(0,0,0,.28)';x.shadowBlur=8;x.shadowOffsetY=2;rr(X,Y,Ww,Hh,r);x.fillStyle=TH['--card'];x.fill();x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;
@@ -232,10 +253,9 @@ else if(n.type=='text'&&Hh>46&&Ww>60){x.globalAlpha=a*.13;x.fillStyle=TH['--tx']
 rr(X,Y,Ww,Hh,r);x.strokeStyle=c||TH['--bd'];x.lineWidth=1.5;x.stroke()}
 x.textBaseline='top';x.lineJoin='round';
 for(const n of NS){if(n.type=='group'||!n.tt)continue;const X=n.x*k+ox,Y=n.y*k+oy,Ww=n.width*k,Hh=n.height*k;if(off(X,Y,Ww,Hh))continue;
-if(n.tw14==null){x.font='600 14px '+FN;n.tw14=x.measureText(n.tt).width}
-const av=Ww-16;let fs=14;if(n.tw14>av)fs=Math.max(10,14*av/n.tw14);x.font='600 '+fs+'px '+FN;
-if(n.bm||n.tw14*fs/14>av){x.strokeStyle=TH['--bg'];x.lineWidth=3;x.strokeText(n.tt,X+8,Y+8)}
-x.fillStyle=TH['--tx'];x.fillText(n.tt,X+8,Y+8)}
+lz(n);let fs=Math.min(14,(Ww-16)/n.tw14*14,Hh-8);if(fs<5)continue;const cl=fs<7;if(cl)fs=7;
+if(cl){x.save();x.beginPath();x.rect(X+3,Y,Ww-6,Hh);x.clip()}
+x.fillStyle=TH['--tx'];dr(n.R,fs,X+8,Y+Math.min(8,(Hh-fs)/2),n.bm?1:0,0);if(cl)x.restore()}
 x.globalAlpha=1}
 function zoomAt(cx,cy,f){const k=clampK(V.k*f),r=k/V.k;V.x=cx-(cx-V.x)*r;V.y=cy-(cy-V.y)*r;V.k=k}
 function fit(w=innerWidth,h=innerHeight){if(!B)return;const pad=PR?20:70;V.k=clampK(Math.min((w-pad*2)/B.w,(h-pad*2-40)/B.h,1));V.x=(w-B.w*V.k)/2-B.x*V.k;V.y=(h-B.h*V.k)/2-B.y*V.k+20;apply()}
@@ -274,7 +294,7 @@ $('#q').addEventListener('keydown',e=>{if(e.key=='Enter'&&HITS.length){focusNode
 
 
 /* ---------- Öffnen / Repo-Browser ---------- */
-const pn=$('#pn'),openP=()=>{const g=ld('cv:gh',{});$('#rp').value=g.repo||'';$('#br').value=g.branch||'';$('#tk').value=cfg.token||'';pn.hidden=false;$('#src').value=localStorage.getItem('cv:src')||'self';setSrc($('#src').value)};
+const pn=$('#pn'),openP=()=>{const g=ld('cv:gh',{});$('#rp').value=g.repo||'';$('#br').value=g.branch||'';$('#tk').value=cfg.token||'';pn.hidden=false;$('#src').value='rec';setSrc('rec')};
 $('#mn').onclick=$('#em1').onclick=openP;$('#cl').onclick=()=>pn.hidden=true;pn.addEventListener('pointerdown',e=>{if(e.target===pn)pn.hidden=true});
 async function ls(path){try{const a=await dirList(path);if(!Array.isArray(a))throw new Error('kein Ordner');
 a.sort((x,y)=>(y.type=='dir')-(x.type=='dir')||x.name.localeCompare(y.name));
@@ -290,9 +310,8 @@ try{t=await(await gh(path,true)).text();kvSet(key,t)}
 catch(e){t=await kvGet(key);if(!t)return toast('Laden fehlgeschlagen ('+e.message+')');toast('Offline: gespeicherte Version')}
 rec=[{repo:cfg.repo,branch:cfg.branch,path},...rec.filter(r=>!(r.repo==cfg.repo&&r.path==path&&r.branch==cfg.branch))].slice(0,20);localStorage.setItem('cv:rec',JSON.stringify(rec));
 localStorage.setItem('cv:last',JSON.stringify({repo:cfg.repo,branch:cfg.branch,path,key,name:path.split('/').pop()}));pn.hidden=true;show(t,path.split('/').pop());renderSb()}
-function renderRec(){const L=$('#rc');L.innerHTML=rec.length?'':'<div class="mu">Noch nichts geöffnet.</div>';
-rec.forEach(r=>{const b=document.createElement('button');b.className='it';b.innerHTML=`${esc(r.path.split('/').pop())}<div class="mu" style="font-size:12px">${esc(rl(r))}</div>`;
-b.onclick=()=>{cfg={...cfg,repo:r.repo,branch:r.branch};localStorage.setItem('cv:cfg',JSON.stringify(cfg));openCanvas(r.path)};L.appendChild(b)})}
+function renderRec(){const L=$('#rc'),a=rec.filter(r=>r.local);L.innerHTML=a.length?'':'<div class="mu s">Noch keine lokalen Dateien geöffnet.</div>';
+a.forEach(r=>{const b=document.createElement('button');b.className='it';b.innerHTML=`${esc(r.name)}<div class="mu" style="font-size:12px">Lokale Datei</div>`;b.onclick=()=>{pn.hidden=true;openRec(r)};L.appendChild(b)})}
 $('#lf').onchange=async e=>{const f=e.target.files[0];if(!f)return;const t=await f.text(),key='cv:c:local:'+f.name;cur={local:true};kvSet(key,t);localStorage.setItem('cv:last',JSON.stringify({local:1,key,name:f.name}));pn.hidden=true;show(t,f.name);addRec({local:1,key,name:f.name});e.target.value=''};
 addEventListener('resize',apply);
 theme();sizeGc();addEventListener('resize',()=>{sizeGc();apply()});matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{theme();apply()});
@@ -305,6 +324,8 @@ if(v=='self'){cfg={...cfg,repo:'@self',branch:''};localStorage.setItem('cv:cfg',
 if(v=='gh'){$('#ls').innerHTML='';$('#cr').textContent=''}if(v=='rec')renderRec()}
 $('#src').onchange=e=>{localStorage.setItem('cv:src',e.target.value);setSrc(e.target.value)};
 const rl=r=>r.local?'Lokale Datei':r.repo=='@self'?'Dieses Repo':r.repo+(r.branch?' @ '+r.branch:'');
+const thm=$('#thm'),isDark=()=>{const t=document.documentElement.dataset.theme;return t?t=='dark':matchMedia('(prefers-color-scheme:dark)').matches},thl=()=>thm.textContent=isDark()?'☀':'☾';
+thm.onclick=()=>{const t=isDark()?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem('cv:theme',t)}catch{}theme();thl();apply()};thl();theme();
 /* Outliner */
 const sb=$('#sb'),rk=r=>r.local?r.key:'cv:c:'+r.repo+'@'+(r.branch||'')+':'+r.path;
 $('#sbt').onclick=()=>{sb.hidden=!sb.hidden;if(!sb.hidden)renderSb()};$('#sbx').onclick=()=>sb.hidden=true;
@@ -313,18 +334,20 @@ async function openRec(r){
 if(r.local){const t=await kvGet(r.key);if(!t)return toast('Datei nicht mehr gespeichert');cur={local:true};localStorage.setItem('cv:last',JSON.stringify({local:1,key:r.key,name:r.name}));show(t,r.name);addRec(r)}
 else{cfg={...cfg,repo:r.repo,branch:r.branch||''};localStorage.setItem('cv:cfg',JSON.stringify(cfg));await openCanvas(r.path)}
 if(innerWidth<700)sb.hidden=true}
-function renderSb(){const lk=(ld('cv:last',null)||{}).key,R=$('#sr');R.innerHTML=rec.length?'':'<div class="mu s">Noch nichts geöffnet.</div>';
-rec.forEach(r=>{const d=document.createElement('div');d.className='it2'+(rk(r)==lk?' on':'');
-d.innerHTML=`<div class="t">${esc(r.local?r.name:r.path.split('/').pop())}</div><div class="mu s">${esc(rl(r))}</div>`;
-d.onclick=()=>openRec(r);const x=document.createElement('button');x.textContent='✕';x.onclick=e=>{e.stopPropagation();rec=rec.filter(y=>y!==r);localStorage.setItem('cv:rec',JSON.stringify(rec));renderSb()};d.appendChild(x);R.appendChild(d)});
-renderOutline()}
+function renderSb(){renderOutline()}
 function renderOutline(){const O=$('#so');O.innerHTML='';if(!NS.length){O.innerHTML='<div class="mu s">Kein Canvas geöffnet.</div>';return}
 const gs=NS.filter(n=>n.type=='group'),rd=(a,b)=>a.y-b.y||a.x-b.x,ch=new Map(gs.sort(rd).map(g=>[g,[]])),free=[];
 for(const n of NS){if(n.type=='group')continue;const cx=n.x+n.width/2,cy=n.y+n.height/2;let b=null;
 for(const g of gs)if(cx>=g.x&&cx<=g.x+g.width&&cy>=g.y&&cy<=g.y+g.height&&(!b||g.width*g.height<b.width*b.height))b=g;b?ch.get(b).push(n):free.push(n)}
-const add=(n,c)=>{const d=document.createElement('div');d.className='ol '+c;d.textContent=n.type=='group'?n.label||'Gruppe':ttl(n)||'(leer)';d.onclick=()=>{focusNode(n);if(innerWidth<700)sb.hidden=true};O.appendChild(d)};
-for(const g of gs){add(g,'g');ch.get(g).sort(rd).forEach(n=>add(n,'c'))}
-if(free.length){if(gs.length){const h=document.createElement('div');h.className='ol g mu';h.textContent='Ohne Gruppe';O.appendChild(h)}free.sort(rd).forEach(n=>add(n,gs.length?'c':''))}}
+const go=n=>{focusNode(n);if(innerWidth<700)sb.hidden=true};
+const item=(n,p)=>{const d=document.createElement('div');d.className='ol';d.innerHTML='<span class="tx">'+(mkh(n.tt||'')||'(leer)')+'</span>';d.onclick=()=>go(n);p.appendChild(d)};
+const block=(id,label,node,kids)=>{const b=document.createElement('div');b.className='og';const h=document.createElement('div');h.className='ol g';
+h.innerHTML=`<span class="chev">${OC.has(id)?'▸':'▾'}</span><span class="tx">${label}</span><span class="cnt">${kids.length}</span>`;
+const c=document.createElement('div');c.className='oc';c.hidden=OC.has(id);kids.sort(rd).forEach(n=>item(n,c));
+const tg=()=>{const was=OC.has(id);was?OC.delete(id):OC.add(id);c.hidden=!was;h.querySelector('.chev').textContent=was?'▾':'▸'};
+h.querySelector('.chev').onclick=e=>{e.stopPropagation();tg()};h.onclick=()=>node?go(node):tg();b.append(h,c);O.appendChild(b)};
+for(const g of gs)block(g.id,mkh(g.tt||'')||'Gruppe',g,ch.get(g));
+if(free.length){if(gs.length)block('__free','Ohne Gruppe',null,free);else free.sort(rd).forEach(n=>item(n,O))}}
 renderSb();
 /* Offline, Export, Wiederherstellen */
 $('#off').onclick=async()=>{const fs=NS.filter(n=>n.type=='file');let i=0,ok=0;for(const n of fs){toast(`Lade ${++i}/${fs.length} …`);if(await fileBlob(n.file,true))ok++}toast(`${ok} von ${fs.length} Dateien offline gespeichert`)};
@@ -356,5 +379,5 @@ const dl=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(bl)
 if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(dl);else dl();toast('PNG fertig')};
 (async()=>{const l=ld('cv:last',null);if(!l)return;cur=l.local?{local:true}:{repo:l.repo,branch:l.branch,path:l.path};if(!l.local)cfg={...cfg,repo:l.repo,branch:l.branch};
 const t=await kvGet(l.key);if(t)show(t,l.name,ld('cv:view',null))})();
-if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js?v=7').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js?v=8').catch(()=>{});
 </script></body></html>
